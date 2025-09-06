@@ -34,7 +34,7 @@ d=exc[exc['Besin-puanı']=='d'][['Ürün','Marka','Besin-puanı']].head(10)
 e=exc[exc['Besin-puanı']=='e'][['Ürün','Marka','Besin-puanı']].head(10)
 mık=exc[exc['Marka']== 'Danone'].head(10)
 
-"""   
+  
 bes=exc["Besin-puanı"].value_counts().reset_index().head(50)
 bes.columns=["adet" ,"Besin-puanı"]
 sns.barplot(y="Besin-puanı", x="adet" ,data=bes)
@@ -81,4 +81,4 @@ plt.title("miktar küçükden büyüğe")
 plt.grid(True)
 plt.xticks(rotation=90)
 plt.show()
-"""
+
