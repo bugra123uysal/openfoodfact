@@ -5,8 +5,8 @@ import pandas as pd
 urun=[ # Dairy & Eggs
     "Milk", "Skim Milk", "Almond Milk", "Soy Milk", "Eggs", "Butter", "Cheese", "Cheddar Cheese", "Mozzarella", 
     "Yogurt", "Greek Yogurt", "Cream", "Whipped Cream", "Cottage Cheese", "Sour Cream",
-]
-""" 
+
+
     # Bread & Bakery
     "White Bread", "Whole Wheat Bread", "Multigrain Bread", "Bagels", "Croissants", "Buns", "Pita Bread", 
     "Tortillas", "Muffins", "Donuts", "Pastries",
@@ -71,7 +71,7 @@ urun=[ # Dairy & Eggs
 
     # Pet Supplies
     "Dog Food", "Cat Food", "Pet Treats" 
-      """
+      ]
 bos=[]
 for allurun in urun:
 
@@ -89,20 +89,20 @@ for allurun in urun:
        """ 
        print(f"{name} - {brand}")
         """
-       bos.append({"Ürün": allurun,"Marka": brand , "Ad": name  ,"katagori": categories,"Miktar":quantity,"ülke":country , "Besin-puanı": nutriscore})
-
+       bos.append({"Ürün": allurun,"Marka": brand , "Ad": name ,"Miktar":quantity,"ülke":country, "katagori": categories , "Besin-puanı": nutriscore})
 exc=pd.DataFrame(bos)
 exc.to_excel("C:\\Users\\buğra\\Desktop\\openfoodfacts\\food.xlsx", index=True)
 print(exc.columns)
 print(exc.info())
 print(exc.dtypes)
-print(exc.shape())
+print(exc.shape)
 print(exc.index)
 print(exc.head())
 print(exc.tail())
 print(exc.describe())
 print(exc.isnull().sum())
-
 print(exc.memory_usage())
+
+
 
 print(exc.nunique()) # her satırda kaç farklı değer var 
