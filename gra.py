@@ -2,13 +2,7 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-
-
-
-
 exc=pd.read_excel(r"C:\Users\buğra\Desktop\openfoodfacts\food.xlsx")
-
-
 
 """  
 exc['Ad']=exc['Ad'].fillna("bilinmiyor")
@@ -27,14 +21,47 @@ print(exc.columns)
 #filtreleme
 marka=exc[exc['Marka']== 'Coca-Cola' ].head(10)
 ger=exc[exc['ülke']=='Germany'][['Ürün', 'Miktar', 'ülke']].head(10)
-a=exc[exc['Besin-puanı']=='a'][['Ürün','Marka','Besin-puanı']].head(10)
-b=exc[exc['Besin-puanı']=='b'][['Ürün','Marka','Besin-puanı']].head(10)
-c=exc[exc['Besin-puanı']=='c'][['Ürün','Marka','Besin-puanı']].head(10)
-d=exc[exc['Besin-puanı']=='d'][['Ürün','Marka','Besin-puanı']].head(10)
-e=exc[exc['Besin-puanı']=='e'][['Ürün','Marka','Besin-puanı']].head(10)
-mık=exc[exc['Marka']== 'Danone'].head(10)
 
+
+#kategorı
+# kategorilerden ilkini alır
+exc['first_katagori']=exc['katagori'].str.split(",").str[0]
+# ülkede ilk ülkeyi alır
+exc['ilk_ülke']=exc['ülke'].str.split(",").str[0]
+ktgr=exc['first_katagori'].value_counts().head(10)
+print(ktgr)
+mık=exc[exc['Marka']== 'Danone'].head(10)
+mra=exc['Marka'].value_counts().head(10) 
+arm=exc['Marka'].value_counts().tail(10)
+cuty=exc['ilk_ülke'].value_counts().head(10)
+cou=exc['ülke'].value_counts().tail(10)
+
+for kat in ['Dairies','Snacks','Seafood']:
+    k=exc[exc['first_katagori']==kat].value_counts('Marka').head(10)
+    kk=exc[exc['first_katagori']==kat].value_counts('Marka').tail(10)
+    print(k)
+
+
+for puan in ['a', 'b', 'c', 'd', 'e']:
+   #miktar
+   haa=exc[exc['Besin-puanı']==puan].value_counts('Miktar').head(10)
+   taa=exc[exc['Besin-puanı']==puan].value_counts('Miktar').tail(10)
   
+   ha=exc[exc['Besin-puanı']==puan][['Ürün','Marka','Besin-puanı']].head(10)
+   ta=exc[exc['Besin-puanı']==puan][['Ürün','Marka','Besin-puanı']].tail(10)
+
+   #marka
+   hallmark=exc[exc['Besin-puanı']==puan].value_counts('Marka').head(10)
+   tallmark=exc[exc['Besin-puanı']==puan].value_counts('Marka').tail(10)
+
+   #kategori
+   hkb=exc[exc['Besin-puanı']== puan].value_counts('first_katagori').head(10)
+   tkb=exc[exc['Besin-puanı']== puan].value_counts('first_katagori').head(10)
+
+   
+
+
+""" 
 bes=exc["Besin-puanı"].value_counts().reset_index().head(50)
 bes.columns=["adet" ,"Besin-puanı"]
 sns.barplot(y="Besin-puanı", x="adet" ,data=bes)
@@ -81,4 +108,4 @@ plt.title("miktar küçükden büyüğe")
 plt.grid(True)
 plt.xticks(rotation=90)
 plt.show()
-
+ """
