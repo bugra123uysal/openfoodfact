@@ -6,17 +6,51 @@ exc=pd.read_excel(r"C:\Users\buğra\Desktop\openfoodfacts\food.xlsx")
 
 """  
 exc['Ad']=exc['Ad'].fillna("bilinmiyor")
-exc['Marka']=exc['Marka'].fillna("billinmiyor")
+exc['Marka']=exc['Marka'].fillna("bilinmiyor")
 exc['katagori']=exc['katagori'].astype(str).str.strip()
 exc['katagori']=exc['katagori'].replace(["","nan","None"], "bilinmiyor")
-exc['katagori']=exc['katagori'].fillna("billinmiyor")
+exc['katagori']=exc['katagori'].fillna("bilinmiyor")
 exc['Miktar']=exc['Miktar'].fillna(0)
 print(exc['katagori'].unique()[:20])
 print(exc['katagori'].isnull().sum())
 print(exc.isnull().sum())
 """
-
+ 
 print(exc.columns)
+
+exc=exc.drop_duplicates()  # tekrar eden ürünleri siler
+print(len(exc))
+
+# miktar daki düzenleme 
+
+exc['birim']=exc['Miktar'].str.extract(r'([a-zA-Z]+)$')
+exc['sayı']=exc['Miktar'].str.extract(r'(\d+\.?\d*)')
+print(exc['birim'].unique())
+def mka(sayı , birim):
+    if pd.isnull(sayı) or pd.isnull(birim):
+        return None
+    
+    sayı=float(sayı)
+    birim=birim.lower()
+
+    if birim in ['g','gr','gram']:
+        return sayı
+    
+    elif birim in ['kg']:
+      return sayı * 1000 
+    elif birim in ['ml']:
+        return sayı
+    elif birim in ['l','lt','litre']:
+        return sayı * 1000
+    elif birim in ['cl']:
+        return sayı * 10
+    elif birim in ['oz']:
+        return sayı * 28.35
+    else:
+        return None # bilinmeyen 
+    
+exc['Miktar_temiz']=exc.apply(lambda x: mka(x['sayı'], x['birim']), axis=1)
+print(exc[['Miktar_temiz', 'Miktar']].head(20))
 
 #filtreleme
 marka=exc[exc['Marka']== 'Coca-Cola' ].head(10)
@@ -29,7 +63,10 @@ exc['first_katagori']=exc['katagori'].str.split(",").str[0]
 # ülkede ilk ülkeyi alır
 exc['ilk_ülke']=exc['ülke'].str.split(",").str[0]
 ktgr=exc['first_katagori'].value_counts().head(10)
-print(ktgr)
+
+
+
+
 mık=exc[exc['Marka']== 'Danone'].head(10)
 mra=exc['Marka'].value_counts().head(10) 
 arm=exc['Marka'].value_counts().tail(10)
@@ -39,13 +76,12 @@ cou=exc['ülke'].value_counts().tail(10)
 for kat in ['Dairies','Snacks','Seafood']:
     k=exc[exc['first_katagori']==kat].value_counts('Marka').head(10)
     kk=exc[exc['first_katagori']==kat].value_counts('Marka').tail(10)
-    print(k)
 
 
 for puan in ['a', 'b', 'c', 'd', 'e']:
    #miktar
-   haa=exc[exc['Besin-puanı']==puan].value_counts('Miktar').head(10)
-   taa=exc[exc['Besin-puanı']==puan].value_counts('Miktar').tail(10)
+   haa=exc[exc['Besin-puanı']==puan].value_counts('Miktar_temiz').head(10)
+   taa=exc[exc['Besin-puanı']==puan].value_counts('Miktar_temiz').tail(10)
   
    ha=exc[exc['Besin-puanı']==puan][['Ürün','Marka','Besin-puanı']].head(10)
    ta=exc[exc['Besin-puanı']==puan][['Ürün','Marka','Besin-puanı']].tail(10)
@@ -58,7 +94,7 @@ for puan in ['a', 'b', 'c', 'd', 'e']:
    hkb=exc[exc['Besin-puanı']== puan].value_counts('first_katagori').head(10)
    tkb=exc[exc['Besin-puanı']== puan].value_counts('first_katagori').head(10)
 
-   
+
 
 
 """ 
@@ -95,14 +131,14 @@ plt.grid(True)
 plt.xticks(rotation=90)
 plt.show()
 
-sıra=exc.sort_values(by='Miktar', ascending=True).head(50)
+sıra=exc.sort_values(by='Miktar_temiz', ascending=True).head(50)
 sns.barplot(y='Ad', x='Miktar' , data=sıra)
 plt.xticks(rotation=90)
 plt.grid(True)
 plt.title("gram")
 plt.show()
 
-sır=exc.sort_values(by='Miktar', ascending=False).head(50)
+sır=exc.sort_values(by='Miktar_temiz', ascending=False).head(50)
 sns.barplot(x="Miktar", y="Ad"  , data=sır)
 plt.title("miktar küçükden büyüğe")
 plt.grid(True)
