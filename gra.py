@@ -4,17 +4,15 @@ import matplotlib.pyplot as plt
 
 exc=pd.read_excel(r"C:\Users\buğra\Desktop\openfoodfacts\food.xlsx")
 
-"""  
-exc['Ad']=exc['Ad'].fillna("bilinmiyor")
-exc['Marka']=exc['Marka'].fillna("bilinmiyor")
-exc['katagori']=exc['katagori'].astype(str).str.strip()
-exc['katagori']=exc['katagori'].replace(["","nan","None"], "bilinmiyor")
-exc['katagori']=exc['katagori'].fillna("bilinmiyor")
-exc['Miktar']=exc['Miktar'].fillna(0)
-print(exc['katagori'].unique()[:20])
-print(exc['katagori'].isnull().sum())
+exc["Ad"]=exc["Ad"].fillna("bilinmiyor")
+exc["Marka"]=exc["Marka"].fillna("bilinmiyor")
+exc["katagori"]=exc["katagori"].astype(str).str.strip()
+exc["katagori"]=exc["katagori"].replace(["","nan","None"], "bilinmiyor")
+exc["katagori"]=exc["katagori"].fillna("bilinmiyor")
+exc["Miktar"]=exc["Miktar"].fillna(0)
+print(exc["katagori"].unique()[:20])
+print(exc["katagori"].isnull().sum())
 print(exc.isnull().sum())
-"""
  
 print(exc.columns)
 
@@ -65,8 +63,6 @@ exc['ilk_ülke']=exc['ülke'].str.split(",").str[0]
 ktgr=exc['first_katagori'].value_counts().head(10)
 
 
-
-
 mık=exc[exc['Marka']== 'Danone'].head(10)
 mra=exc['Marka'].value_counts().head(10) 
 arm=exc['Marka'].value_counts().tail(10)
@@ -95,9 +91,44 @@ for puan in ['a', 'b', 'c', 'd', 'e']:
    tkb=exc[exc['Besin-puanı']== puan].value_counts('first_katagori').head(10)
 
 
+"""
+exc['Marka'].value_counts().head(10).plot(kind='pie',autopct='%1.1f%%')
+plt.title("marka dağılımı")
+plt.show()
+
+exc['first_katagori'].value_counts().head(10).plot(kind='pie', autopct='%.1f%%')
+plt.title("kategoriler")
+plt.show()
+
+exc['ülke'].value_counts().head(10).plot(kind='pie', autopct='%.1f%%')
+plt.title('Ülkeler')
+plt.show()
 
 
-""" 
+plt.hist(exc["Miktar_temiz"].dropna(), bins=50)
+plt.grid(True)
+plt.title("miktar dağılımı (gram)")
+plt.show()
+
+
+plt.hist(exc['Besin-puanı'].dropna(), bins=50)
+plt.title("besin puanı dağılımı")
+plt.grid(True)
+plt.show()
+
+
+
+
+plt.hist(exc['ilk_ülke'].dropna().head(10), bins=50)
+plt.title("ülke dağılımı")
+plt.grid(True)
+plt.show()
+
+
+sns.boxplot(exc['Miktar_temiz'])
+plt.show()
+
+
 bes=exc["Besin-puanı"].value_counts().reset_index().head(50)
 bes.columns=["adet" ,"Besin-puanı"]
 sns.barplot(y="Besin-puanı", x="adet" ,data=bes)
@@ -132,14 +163,14 @@ plt.xticks(rotation=90)
 plt.show()
 
 sıra=exc.sort_values(by='Miktar_temiz', ascending=True).head(50)
-sns.barplot(y='Ad', x='Miktar' , data=sıra)
+sns.barplot(y='Ad', x='Miktar_temiz' , data=sıra)
 plt.xticks(rotation=90)
 plt.grid(True)
 plt.title("gram")
 plt.show()
 
 sır=exc.sort_values(by='Miktar_temiz', ascending=False).head(50)
-sns.barplot(x="Miktar", y="Ad"  , data=sır)
+sns.barplot(x="Miktar_temiz", y="Ad"  , data=sır)
 plt.title("miktar küçükden büyüğe")
 plt.grid(True)
 plt.xticks(rotation=90)
