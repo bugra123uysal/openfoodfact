@@ -119,6 +119,13 @@ ilk_ülke          0
 - matplotlib
 - seaborn
 
+## Analiz 
+En çok hangi markanın ürünü var: Tesco
+En çok hangi kategori var: Plant-based foods and beverages
+En fazla hangi ülke var: France
+En çok hangi besin puanı var: A 
+
+
 ## Grafikler 
 
 <img width="1751" height="854" alt="Ekran görüntüsü 2025-10-02 212941" src="https://github.com/user-attachments/assets/a60908fe-bebf-40c6-aa01-728f77086351" />
